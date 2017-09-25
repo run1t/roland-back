@@ -1,3 +1,4 @@
+import * as program from 'commander';
 import { GitlabDeploy } from './gitlab-deploy';
 
 
@@ -11,13 +12,22 @@ const options = {
     pass: 'fVC5XGhQ2b5hyXLhxiriwKf23v7f9ULp8yuwLieX'
 }
 
-const gitlab = GitlabDeploy.getInstance(options);
-gitlab.update()
-    .subscribe(
-        (next) => {
-            console.log(next);
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
+program
+.version('0.1.0')
+.option('-u, --update', 'update service')
+.parse(process.argv);
+
+
+console.log(program);
+if(program.update){
+    const gitlab = GitlabDeploy.getInstance(options);
+    gitlab.update()
+        .subscribe(
+            (next) => {
+                console.log(next);
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+}
