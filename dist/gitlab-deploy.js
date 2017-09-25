@@ -28,18 +28,18 @@ class R {
         const _options = Object.assign({}, options, { method: 'GET' });
         return R.request(uri, options);
     }
-    // static post(uri, options){
-    //     const _options = Object.assign({}, options, {method: 'POST', uri});
-    //     return R.request(options);
-    // }
-    // static put(uri, options){
-    //     const _options = Object.assign({}, options, {method: 'PUT', uri});
-    //     return R.request(options);
-    // }
-    // static delete(uri, options){
-    //     const _options = Object.assign({}, options, {method: 'DELETE', uri});
-    //     return R.request(options);
-    // }
+    static post(uri, options) {
+        const _options = Object.assign({}, options, { method: 'POST', uri });
+        return R.request(uri, options);
+    }
+    static put(uri, options) {
+        const _options = Object.assign({}, options, { method: 'PUT', uri });
+        return R.request(uri, options);
+    }
+    static delete(uri, options) {
+        const _options = Object.assign({}, options, { method: 'DELETE', uri });
+        return R.request(uri, options);
+    }
     static request(uri, options) {
         return Observable_1.Observable.create((observer) => {
             request(uri, options, (error, response, body) => {
