@@ -8,12 +8,6 @@
     "start": "tsc && node dist/index.js"
   },
   "dependencies": {
-    "@types/commander": "^2.9.2",
-    "@types/node": "^8.0.30",
-    "@types/request": "^2.0.3",
-    "commander": "^2.11.0",
-    "request": "^2.82.0",
-    "rxjs": "^5.4.3",
     "typescript-eslint-parser": "^8.0.0"
   }
 }
