@@ -1,5 +1,6 @@
+import { Admin } from './../models/admin';
 import { config } from './../env/config';
-import { AppAdminInstance } from './../models/admin';
+import { Model } from 'sequelize'; 
 import {Router, Request, Response, NextFunction} from 'express';
 import * as jwt from 'jsonwebtoken';  
 import DbConnection from '../DbConnection';
@@ -34,7 +35,7 @@ class AuthRouter {
       where: {
         login: name
       }})
-    .then( (users: Array<AppAdminInstance>) => {
+    .then( (users: Array<Admin>) => {
       if(users.length <= 0){
         res.status(401).json({ error: 'Authentication failed. User not found.' });
       } else if (password !== users[0].password) {

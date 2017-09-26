@@ -1,28 +1,25 @@
-import * as Sequelize from 'sequelize'
+import { DataTypes, Sequelize, Instance} from 'sequelize'
 
-export interface AppAdminAttributes {
+export interface Admin {
   id_admin?: string
   login?: string,
-  password?: string
+  password?: string,
 }
 
-export interface AppAdminInstance extends Sequelize.Instance<AppAdminAttributes> {
-  id_admin: string
-  login: string,
-  password: string,
-}
-
-export default function defineAdmin(sequelize: Sequelize.Sequelize, DataTypes) {
-  const AppAdmin = sequelize.define('admin', {
+export default function defineAdmin(sequelize: Sequelize, DataTypes: DataTypes) {
+  const schema = {
     id_admin: {
       type: DataTypes.INTEGER,
       primaryKey: true
     },
     login: DataTypes.STRING,
     password: DataTypes.STRING,
-  },{
+  }
+
+  const options = {
     freezeTableName: true,
     timestamps: false
-  });
-  return AppAdmin
+  };
+
+  return sequelize.define('admin', schema, options);
 }
