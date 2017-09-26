@@ -3,8 +3,10 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 
+import AuthRouter from './routes/AuthRouter';
+
 // Creates and configures an ExpressJS web server.
-class App {
+class app {
 
   // ref to Express instance
   public express: express.Application;
@@ -33,8 +35,9 @@ class App {
       });
     });
     this.express.use('/', router);
+    this.express.use('/login', AuthRouter);
   }
 
 }
 
-export default new App().express;
+export default new app().express;
