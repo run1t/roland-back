@@ -1,8 +1,9 @@
 import {Router, Request, Response, NextFunction} from 'express';
 import * as jwt from 'jsonwebtoken';  
 import * as expressJwt from 'express-jwt';  
+import {Admin} from '../models/admin';
 
-export class AuthRouter {
+class AuthRouter {
   router: Router
 
   /**
@@ -17,6 +18,9 @@ export class AuthRouter {
    * GET auth token.
    */
   public getAuth(req: Request, res: Response, next: NextFunction) {
+    Admin.findAll().then(users => {
+      console.log(users)
+    })
     const userLogin = req.body.username;
     const userPassword = req.body.password;
 

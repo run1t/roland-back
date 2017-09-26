@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
+import DBConnection from './DBConnection';
 
 import AuthRouter from './routes/AuthRouter';
 
@@ -16,6 +17,7 @@ class app {
     this.express = express();
     this.middleware();
     this.routes();
+    DBConnection.getInstance();
   }
 
   // Configure Express middleware.
