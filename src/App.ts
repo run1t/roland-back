@@ -27,16 +27,17 @@ class app {
     this.express.use(logger('dev'));
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
-    this.express.use(jwt({ secret: config.jwt}).unless({path: ['/login']}));
+    this.express.use(jwt({ secret: config.jwt}).unless({path: ['/login','/ping']}));
   }
 
   // Configure API endpoints.
   private routes(): void {
     let router = express.Router();
-    router.get('/', (req, res, next) => {
-      res.json({
-        message: 'Hello World!'
-      });
+    router.get('/ping', (req, res, next) => {
+      res.send('pong').status(200);
+    });
+    router.get('/hello', (req, res, next) => {
+      res.json({message: 'world'});
     });
     this.express.use('/', router);
     this.express.use('/login', AuthRouter);
