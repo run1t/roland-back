@@ -1,9 +1,10 @@
 export const config = { 
-  "dbConfig": {
+  "db": {
     "user": "reunan",
     "pass": "",
     "host": "localhost",
     "port": 5432,
-    "dbName": "roland"
-  }
+    "name": "roland"
+  },
+  "jwt": "supersecretjwt"
 }

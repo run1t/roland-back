@@ -15,9 +15,8 @@ export default class DbConnection {
     }
     
     private init(): void {
-        const URI = 'postgres://'+config.dbConfig.user+':'+config.dbConfig.pass+'@'+config.dbConfig.host+':'+config.dbConfig.port+'/'+config.dbConfig.dbName; 
+        const URI = 'postgres://'+config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.name;
         DbConnection.sequelize = new Sequelize(URI);
-        
     }
     
     static getInstance() {

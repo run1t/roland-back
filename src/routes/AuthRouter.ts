@@ -1,7 +1,7 @@
+import { config } from './../env/config';
 import { AppAdminInstance } from './../models/admin';
 import {Router, Request, Response, NextFunction} from 'express';
 import * as jwt from 'jsonwebtoken';  
-import * as expressJwt from 'express-jwt';  
 import DbConnection from '../DbConnection';
 
 class AuthRouter {
@@ -22,7 +22,7 @@ class AuthRouter {
   init() {
     this.router.post('/', this.getAuth);
   }
-  
+
   /**
    * GET auth token.
    */
@@ -40,7 +40,7 @@ class AuthRouter {
       } else if (password !== users[0].password) {
         res.status(401).json({ error: 'Authentication failed. Wrong password.' });
       } else {
-        res.json({token: jwt.sign({ email: name}, 'RESTFULAPIs')});
+        res.json({token: jwt.sign({ email: name}, config.jwt)});
       }
     });
   }
