@@ -1,7 +1,9 @@
+import { Admin } from './../models/admin';
+import { config } from './../env/config';
+import { Model } from 'sequelize'; 
 import {Router, Request, Response, NextFunction} from 'express';
 import * as jwt from 'jsonwebtoken';  
-import * as expressJwt from 'express-jwt';  
-import {Admin} from '../models/admin';
+import DbConnection from '../DbConnection';
 
 class AuthRouter {
   router: Router
@@ -15,34 +17,45 @@ class AuthRouter {
   }
 
   /**
-   * GET auth token.
-   */
-  public getAuth(req: Request, res: Response, next: NextFunction) {
-    Admin.findAll().then(users => {
-      console.log(users)
-    })
-    const userLogin = req.body.username;
-    const userPassword = req.body.password;
-
-      if (userLogin !== 'root') {
-        res.status(401).json({ error: 'Authentication failed. User not found.' });
-      } else if (userLogin === 'root') {
-        if (userPassword !== 'root') {
-          res.status(401).json({ error: 'Authentication failed. Wrong password.' });
-        } else {
-          return res.json({token: jwt.sign({ email: userLogin}, 'RESTFULAPIs')});
-        }
-      }
-  }
-
-  /**
-   * Take each handler, and attach to one of the Express.Router's
-   * endpoints.
-   */
+  * Take each handler, and attach to one of the Express.Router's
+  * endpoints.
+  */
   init() {
     this.router.post('/', this.getAuth);
   }
 
+  /**
+   * GET auth token.
+   */
+  public getAuth(req: Request, res: Response, next: NextFunction) {
+    const authorization = req.get('authorization');
+    const {name, password} = getCredentials(authorization);
+
+    DbConnection.models['admin'].findAll({
+      where: {
+        login: name
+      }})
+    .then( (users: Array<Admin>) => {
+      if(users.length <= 0){
+        res.status(401).json({ error: 'Authentication failed. User not found.' });
+      } else if (password !== users[0].password) {
+        res.status(401).json({ error: 'Authentication failed. Wrong password.' });
+      } else {
+        res.json({token: jwt.sign({ email: name} as object, config.jwt)});
+      }
+    });
+  }
+
+  
+}
+
+
+// helpers
+function getCredentials(authorization){
+  const credentials = new Buffer(authorization.split(" ").pop(), "base64").toString("ascii").split(":");
+  const name = credentials[0];
+  const password = credentials[1];
+  return {name, password};
 }
 
 // Create the AuthRouter, and export its configured Express.Router
