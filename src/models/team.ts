@@ -1,22 +1,18 @@
-import * as Sequelize from 'sequelize'
+import {DataTypes, Sequelize} from 'sequelize'
+import {defaultOption} from '../utils/sequelize'
 
-export interface AppTeamAttributes {
+export interface Team {
   id_team?: string
 }
 
-export interface AppTeamInstance extends Sequelize.Instance<AppTeamAttributes> {
-  id_team: string
-}
-
-export default function defineTeam(sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  const AppTeam = sequelize.define('team', {
+export default function defineTeam(sequelize: Sequelize, DataTypes: DataTypes) {
+  
+  const schema = {
     id_team: {
       type: DataTypes.INTEGER,
       primaryKey: true
     }
-  },{
-    freezeTableName: true,
-    timestamps: false
-  });
-  return AppTeam
+  };
+
+  return sequelize.define('team', schema, defaultOption());
 }

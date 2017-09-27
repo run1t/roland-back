@@ -28,20 +28,24 @@ export default class DbConnection {
 
     private loadModels() {
         const basename = path.basename(module.filename)
+        debugger;
         fs.readdirSync(`${__dirname}/models`)
           .filter((file) => {
-            return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
+            return (file.indexOf('.') !== 0) && (file !== 'index.js') && (file.slice(-3) === '.js')
           })
           .forEach((file) => {
             const model = DbConnection.sequelize['import'](path.join(`${__dirname}/models`, file))
             // NOTE: you have to change from the original property notation to
             // index notation or tsc will complain about undefined property.
-            DbConnection.models[model['name']] = model
+            console.log(file);
+            
+            DbConnection.models[model['name']] = model;
           })
-        
+        console.log('test');
         Object.keys(DbConnection.models).forEach(function(modelName) {
           if (DbConnection.models[modelName].associate) {
-            // DbConnection.models[modelName].associate(DbConnection.models)
+            console.log(DbConnection.models[modelName]);
+            DbConnection.models[modelName].associate(DbConnection.models)
           }
         })
     }

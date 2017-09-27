@@ -41,7 +41,7 @@ class AuthRouter {
       } else if (password !== users[0].password) {
         res.status(401).json({ error: 'Authentication failed. Wrong password.' });
       } else {
-        res.json({token: jwt.sign({ email: name}, config.jwt)});
+        res.json({token: jwt.sign({ email: name} as object, config.jwt)});
       }
     });
   }

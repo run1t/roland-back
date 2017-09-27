@@ -19,6 +19,7 @@ class app {
     this.express = express();
     this.middleware();
     this.routes();
+    
     DbConnection.getInstance();
   }
 

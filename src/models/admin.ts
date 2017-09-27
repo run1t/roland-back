@@ -1,4 +1,5 @@
-import { DataTypes, Sequelize, Instance} from 'sequelize'
+import {DataTypes, Sequelize} from 'sequelize'
+import {defaultOption} from '../utils/sequelize'
 
 export interface Admin {
   id_admin?: string
@@ -7,6 +8,7 @@ export interface Admin {
 }
 
 export default function defineAdmin(sequelize: Sequelize, DataTypes: DataTypes) {
+  
   const schema = {
     id_admin: {
       type: DataTypes.INTEGER,
@@ -16,10 +18,5 @@ export default function defineAdmin(sequelize: Sequelize, DataTypes: DataTypes) 
     password: DataTypes.STRING,
   }
 
-  const options = {
-    freezeTableName: true,
-    timestamps: false
-  };
-
-  return sequelize.define('admin', schema, options);
+  return sequelize.define('admin', schema, defaultOption());
 }
