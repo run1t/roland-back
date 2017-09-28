@@ -28,7 +28,7 @@ describe('Authentification', () => {
 
     });
 
-    it('should return admin doesn\'t exist', () => {
+    it('should return "Authentication failed. User not found."', () => {
 
         DbConnection.models['admin'] = mockModelWith(emptyUsers);
 
@@ -36,14 +36,13 @@ describe('Authentification', () => {
             .auth('reunan', 'reunan')
             .then(() => {})
             .catch((err) => {
-                console.log(err.response.res.body);
                 expect(err.status).to.be.equal(401);
-                expect(err.response.res.body.error).to.be.equal('admin does\'nt exist');
+                expect(err.response.res.body.error).to.be.equal('Authentication failed. User not found.');
             });
     });
 
 
-    it('should return "password is wrong" and 401 in body', () => {
+    it('should return "Authentication failed. Wrong password." and 401 in body', () => {
 
         DbConnection.models['admin'] = mockModelWith(users);
 
@@ -52,11 +51,11 @@ describe('Authentification', () => {
             .then((err) => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
-                expect(err.response.res.body.error).to.be.equal('password is wrong');
+                expect(err.response.res.body.error).to.be.equal('Authentication failed. Wrong password.');
             });
     });
 
-    it('should return "not authorization header found"', () => {
+    it('should return "Authentication failed. No authorization header found"', () => {
 
         DbConnection.models['admin'] = mockModelWith(users);
 
@@ -64,7 +63,7 @@ describe('Authentification', () => {
             .then(() => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
-                expect(err.response.res.body.error).to.be.equal('not authorization header found');
+                expect(err.response.res.body.error).to.be.equal('Authentication failed. No authorization header found');
             });
     });
 
