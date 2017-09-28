@@ -60,3 +60,6 @@ typings/
 
 # dist
 dist/
+
+#configuration
+src/env/config.ts
