@@ -28,23 +28,9 @@ describe('Authentification', () => {
 
     });
 
-    it('Should return admin doesn\'t exist', () => {
-
-        DbConnection.models['admin'] = mockModelWith(users);
-
-        return chai.request(app).post('/token')
-            .auth('wrong', 'password')
-            .then(() => {})
-            .catch((err) => {
-                expect(err.status).to.be.equal(401);
-                expect(err.body.message).to.be.equal('admin does\'nt exist');
-            });
-    });
-
-    /*
     it('Should return "admin doesn\'t exist" and 401 in body', () => {
 
-        DbConnection.models['admin'] = mockModelWith(users);
+        DbConnection.models['admin'] = mockModelWith(emptyUsers);
 
         return chai.request(app).post('/token')
             .auth('wrong', 'password')
@@ -52,7 +38,6 @@ describe('Authentification', () => {
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
                 expect(err.body.message).to.be.equal('admin does\'nt exist');
-                expect(err.body.error).to.be.equal(401);
             });
     });
 
@@ -66,18 +51,20 @@ describe('Authentification', () => {
             .then((err) => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
+                expect(err.body.message).to.be.equal('password is wrong');
             });
     });
 
-    it('Should return "not authorization header found"', () => {
+    it('Should return "no authorization header found"', () => {
 
-        DbConnection.models['admin'] = mockModelWith(users);
+        DbConnection.models['admin'] = mockModelWith(emptyUsers);
 
         return chai.request(app).post('/token')
             .then(() => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
+                expect(err.body.message).to.be.equal('no authorization header found');
             });
-    }); */
+    });
 
 });
