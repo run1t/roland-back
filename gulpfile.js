@@ -11,13 +11,7 @@ gulp.task('scripts', () => {
   return tsResult.js.pipe(gulp.dest('dist'));
 });
 
-gulp.task('map', () => {
-  const tsResult = tsProject.src()
-  .pipe(tsProject());
-  return tsResult.js.map.pipe(gulp.dest('dist'));
-});
-
-gulp.task('watch', ['scripts', 'map'], () => {
+gulp.task('watch', ['scripts'], () => {
   gulp.watch('src/**/*.ts', ['scripts']);
 });
 

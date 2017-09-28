@@ -2,14 +2,18 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import app from '../src/App';
-import DbConnection from '../src/DbConnection';
+import DbConnection from '../src/dbConnection';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-
+//
 
 describe('Authentification', () => {
+
+  beforeEach(() => {
+      DbConnection.models = [];
+  });
 
   it('Should respond with json webtoken with status 201', () => {
 
@@ -47,11 +51,10 @@ describe('Authentification', () => {
     };
 
     return chai.request(app).post('/token')
-    .auth('wrong', 'password')
-    .then(res => {
-      console.log(res);
-      expect(res.status).to.be.equal(401);
-    });
+        .auth('wrong', 'password')
+        .catch((err) => {
+            expect(err.status).to.be.equal(401);
+        });
   });
 
 });

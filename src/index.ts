@@ -13,6 +13,13 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+
+/**
+ * If the function has a string as input, convert it to int with
+ * the normalized form of a port
+ * @param {number | string} val
+ * @returns {number | string | boolean}
+ */
 function normalizePort(val: number|string): number|string|boolean {
   let port: number = (typeof val === 'string') ? parseInt(val, 10) : val;
   if (isNaN(port)) return val;
@@ -20,6 +27,11 @@ function normalizePort(val: number|string): number|string|boolean {
   else return false;
 }
 
+
+/**
+ * Handle node process expections
+ * @param {NodeJS.ErrnoException} error
+ */
 function onError(error: NodeJS.ErrnoException): void {
   if (error.syscall !== 'listen') throw error;
   let bind = (typeof port === 'string') ? 'Pipe ' + port : 'Port ' + port;
@@ -37,6 +49,9 @@ function onError(error: NodeJS.ErrnoException): void {
   }
 }
 
+/**
+ * Display server address in debug
+ */
 function onListening(): void {
   let addr = server.address();
   let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;

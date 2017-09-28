@@ -38,6 +38,7 @@ export default class DbConnection {
     private injectModels(){
         fs.readdirSync(`${__dirname}/models`)
             .filter((file) => {
+
                 return (file.indexOf('.') !== 0) && (file !== 'index.js') && (file.slice(-3) === '.js')
             })
             .forEach((file) => {
@@ -47,11 +48,11 @@ export default class DbConnection {
     }
 
     private associateModels(){
-        Object.keys(DbConnection.models).forEach(function(modelName) {
+       /* Object.keys(DbConnection.models).forEach(function(modelName) {
             if (DbConnection.models[modelName].associate) {
                 DbConnection.models[modelName].associate(DbConnection.models)
             }
-        })
+        }) */
     }
 
 

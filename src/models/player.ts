@@ -30,7 +30,7 @@ export default function definePlayer(sequelize: Sequelize, DataTypes: DataTypes)
         debugger;
       }
     }
-  } 
+  };
 
   return sequelize.define('player', schema, associate);
 }

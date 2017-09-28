@@ -4,8 +4,10 @@ import * as bodyParser from 'body-parser';
 import * as jwt from 'express-jwt';
 
 import {config} from './env/config';
-import DbConnection from './DbConnection';
-import AuthRouter from './routes/AuthRouter';
+
+import DbConnection from './dbConnection';
+
+import { AuthRouter } from './routes/authRouter';
 
 class App {
 
@@ -24,21 +26,14 @@ class App {
     this.express.use(logger('dev'));
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
-    this.express.use(jwt({ secret: config.jwt}).unless({path: ['/token','/ping']}));
+    this.express.use(jwt({ secret: config.jwt}).unless({path: ['/token']}));
   }
 
   // Configure API endpoints.
   private routes(): void {
-    let router = express.Router();
-    router.get('/ping', (req, res) => {
-      res.send('pong').status(200);
-    });
-    router.get('/hello', (req, res) => {
-      res.json({message: 'world'});
-    });
-    this.express.use('/', router);
-    this.express.use('/token', AuthRouter);
+    this.express.use('/token', new AuthRouter().init());
   }
+
 
 }
 

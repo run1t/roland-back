@@ -2,9 +2,9 @@ import { Admin } from '../models/admin';
 import { config } from '../env/config';
 import {Router, Request, Response, NextFunction} from 'express';
 import * as jwt from 'jsonwebtoken';  
-import DbConnection from '../DbConnection';
+import DbConnection from '../dbConnection';
 
-class AuthRouter {
+export class AuthRouter {
   router: Router;
 
   /**
@@ -12,7 +12,7 @@ class AuthRouter {
    */
   constructor() {
     this.router = Router();
-    this.init();
+    this.router.post('/', this.getAuth);
   }
 
   /**
@@ -20,13 +20,13 @@ class AuthRouter {
   * endpoints.
   */
   init() {
-    this.router.post('/', this.getAuth);
+    return this.router;
   }
 
   /**
    * GET auth token.
    */
-  public getAuth(req: Request, res: Response, next: NextFunction) {
+  public getAuth(req: Request, res: Response) {
     const authorization = req.get('authorization');
     const {name, password} = getCredentials(authorization);
     DbConnection.models['admin'].findAll({
@@ -36,13 +36,14 @@ class AuthRouter {
     .then( (users: Array<Admin>) => {
       console.log(users);
       if(users.length <= 0){
-        return res.status(404).json({ error: 'Authentication failed. User not found.' });
+        return res.status(401).json({ error: 'Authentication failed. User not found.' });
       } else if (password !== users[0].password) {
         return res.status(401).json({ error: 'Authentication failed. Wrong password.' });
       } else {
         return res.json({token: jwt.sign({ email: name} as object, config.jwt)});
       }
     });
+
   }
 
   
@@ -56,9 +57,3 @@ function getCredentials(authorization){
   const password = credentials[1];
   return {name, password};
 }
-
-// Create the AuthRouter, and export its configured Express.Router
-const authRoutes = new AuthRouter();
-authRoutes.init();
-
-export default authRoutes.router;
