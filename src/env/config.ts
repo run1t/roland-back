@@ -7,4 +7,4 @@ export const config = {
     "name": "roland"
   },
   "jwt": "supersecretjwt"
-}
+};
