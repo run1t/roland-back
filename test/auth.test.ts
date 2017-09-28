@@ -15,7 +15,7 @@ describe('Authentification', () => {
     const users = [{login: 'reunan', password: 'reunan'},{login: 'cyprien', password: 'cyprien'}];
     const emptyUsers = [];
 
-    it('Should respond with json webtoken with status 201', () => {
+    it('should respond with json webtoken with status 201', () => {
 
         DbConnection.models['admin'] = mockModelWith(users);
         return chai.request(app).post('/token')
@@ -28,48 +28,34 @@ describe('Authentification', () => {
 
     });
 
-    it('Should return admin doesn\'t exist', () => {
+    it('should return "Authentication failed. User not found."', () => {
 
-        DbConnection.models['admin'] = mockModelWith(users);
+        DbConnection.models['admin'] = mockModelWith(emptyUsers);
 
         return chai.request(app).post('/token')
-            .auth('wrong', 'password')
+            .auth('reunan', 'reunan')
             .then(() => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
-                expect(err.body.message).to.be.equal('admin does\'nt exist');
-            });
-    });
-
-    /*
-    it('Should return "admin doesn\'t exist" and 401 in body', () => {
-
-        DbConnection.models['admin'] = mockModelWith(users);
-
-        return chai.request(app).post('/token')
-            .auth('wrong', 'password')
-            .then(() => {})
-            .catch((err) => {
-                expect(err.status).to.be.equal(401);
-                expect(err.body.message).to.be.equal('admin does\'nt exist');
-                expect(err.body.error).to.be.equal(401);
+                expect(err.response.res.body.error).to.be.equal('Authentication failed. User not found.');
             });
     });
 
 
-    it('Should return "password is wrong" and 401 in body', () => {
+    it('should return "Authentication failed. Wrong password." and 401 in body', () => {
 
         DbConnection.models['admin'] = mockModelWith(users);
 
         return chai.request(app).post('/token')
-            .auth('wrong', 'password')
+            .auth('reunan', 'password')
             .then((err) => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
+                expect(err.response.res.body.error).to.be.equal('Authentication failed. Wrong password.');
             });
     });
 
-    it('Should return "not authorization header found"', () => {
+    it('should return "Authentication failed. No authorization header found"', () => {
 
         DbConnection.models['admin'] = mockModelWith(users);
 
@@ -77,7 +63,8 @@ describe('Authentification', () => {
             .then(() => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
+                expect(err.response.res.body.error).to.be.equal('Authentication failed. No authorization header found');
             });
-    }); */
+    });
 
 });

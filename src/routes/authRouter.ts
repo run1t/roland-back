@@ -28,6 +28,11 @@ export class AuthRouter {
      */
     public getAuth(req: Request, res: Response) {
         const authorization = req.get('authorization');
+
+        if(!authorization){
+            return res.status(401).json({error: 'Authentication failed. No authorization header found'});
+        }
+
         const {name, password} = getCredentials(authorization);
         DbConnection.models['admin'].findAll({
             where: {
