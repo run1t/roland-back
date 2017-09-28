@@ -15,7 +15,7 @@ describe('Authentification', () => {
     const users = [{login: 'reunan', password: 'reunan'},{login: 'cyprien', password: 'cyprien'}];
     const emptyUsers = [];
 
-    it('Should respond with json webtoken with status 201', () => {
+    it('should respond with json webtoken with status 201', () => {
 
         DbConnection.models['admin'] = mockModelWith(users);
         return chai.request(app).post('/token')
@@ -28,42 +28,43 @@ describe('Authentification', () => {
 
     });
 
-    it('Should return "admin doesn\'t exist" and 401 in body', () => {
+    it('should return admin doesn\'t exist', () => {
 
         DbConnection.models['admin'] = mockModelWith(emptyUsers);
 
         return chai.request(app).post('/token')
-            .auth('wrong', 'password')
+            .auth('reunan', 'reunan')
             .then(() => {})
             .catch((err) => {
+                console.log(err.response.res.body);
                 expect(err.status).to.be.equal(401);
-                expect(err.body.message).to.be.equal('admin does\'nt exist');
+                expect(err.response.res.body.error).to.be.equal('admin does\'nt exist');
             });
     });
 
 
-    it('Should return "password is wrong" and 401 in body', () => {
+    it('should return "password is wrong" and 401 in body', () => {
 
         DbConnection.models['admin'] = mockModelWith(users);
 
         return chai.request(app).post('/token')
-            .auth('wrong', 'password')
+            .auth('reunan', 'password')
             .then((err) => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
-                expect(err.body.message).to.be.equal('password is wrong');
+                expect(err.response.res.body.error).to.be.equal('password is wrong');
             });
     });
 
-    it('Should return "no authorization header found"', () => {
+    it('should return "not authorization header found"', () => {
 
-        DbConnection.models['admin'] = mockModelWith(emptyUsers);
+        DbConnection.models['admin'] = mockModelWith(users);
 
         return chai.request(app).post('/token')
             .then(() => {})
             .catch((err) => {
                 expect(err.status).to.be.equal(401);
-                expect(err.body.message).to.be.equal('no authorization header found');
+                expect(err.response.res.body.error).to.be.equal('not authorization header found');
             });
     });
 
