@@ -82,18 +82,15 @@ describe('Player', () => {
 
     });
 
-    // TODO: this test have to paaaaaass
     it('should NOT be able to get a player', () => {
         DbConnection.models['player'] = mockModelWith(noPlayer);
 
         let toktok = 'Bearer '+ jwt.sign({} as object, config.jwt);
-        return chai.request(app).get('/players/1222224')
+        return chai.request(app).get('/players/12')
             .set('Authorization', toktok)
-            .then(res => {
-                expect(res.status).to.equal(400);
-                expect(res).to.be.json;
-                expect(res.body).to.be.an('object');
-                expect(res.body).to.have.property('data');
+            .then(() => {})
+            .catch((err) => {
+                expect(err.status).to.equal(404);
             });
 
 

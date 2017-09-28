@@ -2,7 +2,7 @@ import {DataTypes, Sequelize} from 'sequelize'
 import {defaultOption} from '../utils/sequelize'
 
 export interface Player {
-  id_player?: string
+  id_player?: number,
   firstname?: string,
   lastname?: string
   sexe?: boolean
@@ -14,7 +14,8 @@ export default function definePlayer(sequelize: Sequelize, DataTypes: DataTypes)
   const schema = {
     id_player: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     firstname: DataTypes.STRING,
     lastname: DataTypes.STRING,
