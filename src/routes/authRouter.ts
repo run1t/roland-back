@@ -8,7 +8,7 @@ export class AuthRouter {
     router: Router;
 
     /**
-     * Initialize the AuthRouter
+     * Initialize the authRouter
      */
     constructor() {
         this.router = Router();

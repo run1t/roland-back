@@ -8,6 +8,7 @@ import {config} from './env/config';
 import DbConnection from './dbConnection';
 
 import { AuthRouter } from './routes/authRouter';
+import {PlayerRouter} from "./routes/playerRouter";
 
 class App {
 
@@ -32,6 +33,7 @@ class App {
   // Configure API endpoints.
   private routes(): void {
     this.express.use('/token', new AuthRouter().init());
+    this.express.use('/player', new PlayerRouter().init());
   }
 
 

@@ -1,10 +1,10 @@
 export const config = { 
   "db": {
-    "user": "reunan",
+    "user": "cyprien",
     "pass": "",
     "host": "localhost",
     "port": 5432,
-    "name": "roland"
+    "name": "cyprien"
   },
   "jwt": "supersecretjwt"
 };

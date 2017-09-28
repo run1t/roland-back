@@ -1,4 +1,4 @@
-import DbConnection from "../src/DBConnection";
+import DbConnection from "../src/dbConnection";
 
 
 export function mockModelWith(data) {
@@ -6,6 +6,13 @@ export function mockModelWith(data) {
         findAll: () => {
             return {
                 then: (call) => {
+                    call(data);
+                }
+            }
+        },
+        create : () => {
+            return{
+                then: (call) =>{
                     call(data);
                 }
             }

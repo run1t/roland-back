@@ -1,5 +1,5 @@
 import {DataTypes, Sequelize} from 'sequelize'
-import {overrideDefaultOptions} from '../utils/sequelize'
+import {defaultOption} from '../utils/sequelize'
 
 export interface Player {
   id_player?: string
@@ -22,15 +22,5 @@ export default function definePlayer(sequelize: Sequelize, DataTypes: DataTypes)
     nationality: DataTypes.STRING
   };
 
-  
-  const associate = {
-    classMethods: {
-      associate: (models) => {
-        console.log(this, models);
-        debugger;
-      }
-    }
-  };
-
-  return sequelize.define('player', schema, associate);
+  return sequelize.define('player', schema, defaultOption());
 }
