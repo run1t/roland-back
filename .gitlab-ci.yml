@@ -1,0 +1,56 @@
+stages:
+  - build
+  - docker
+  - deploy
+
+cache:
+  untracked: true
+  key: "$CI_PROJECT_ID"
+  paths:
+    - node_modules/
+    - _site/vendor/
+    - .bundled/
+    - .yarn
+
+build:
+  image: kkarczmarczyk/node-yarn:latest
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+    - dist/
+  tags:
+    - docker
+
+build-docker:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: docker
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  tags:
+    - docker
+
+deploy-test-first:
+  stage: deploy
+  image: fabn/rancher-cli
+  environment:
+        name: review/$CI_COMMIT_REF_SLUG
+        url: http://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.r.uneeon.com
+  script:
+    - rancher --environment Default run --name test/$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  allow_failure: true
+
+
+deploy-test-latest:
+  stage: deploy
+  image: cdrx/rancher-gitlab-deploy
+  environment:
+        name: review/$CI_COMMIT_REF_SLUG
+        url: http://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.r.uneeon.com
+  script:
+    - upgrade --environment Default --stack test --service $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
