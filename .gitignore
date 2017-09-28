@@ -62,6 +62,6 @@ typings/
 dist/
 
 #configuration
-src/env/config.ts
+src/env/env.ts
 
 .idea/*

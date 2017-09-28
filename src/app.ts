@@ -23,6 +23,7 @@ class App {
 
   // Configure Express middleware.
   private middleware(): void {
+    console.log(config);
     this.express.use(logger('dev'));
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
