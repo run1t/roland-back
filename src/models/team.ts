@@ -13,6 +13,7 @@ export default function defineTeam(sequelize: Sequelize, DataTypes: DataTypes) {
       primaryKey: true
     }
   };
+  
 
   return sequelize.define('team', schema, defaultOption());
 }

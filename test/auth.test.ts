@@ -1,45 +1,57 @@
-import * as mocha from 'mocha';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import app from '../src/App';
+import DbConnection from '../src/DbConnection';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-describe('Authentification OK', () => {
 
-  it('responds with JSON object', () => {
-    return chai.request(app).post('/login')
-    .send({ username: 'root', password: 'root' })
-      .then(res => {
+
+describe('Authentification', () => {
+
+  it('Should respond with json webtoken with status 201', () => {
+
+    DbConnection.models['admin'] ={
+      findAll: () => {
+        return {
+          then: (call) => {
+              call([{login: 'reunan', password: 'password'}]);
+          }
+        }
+      }
+    };
+
+    return chai.request(app).post('/token')
+    .auth('reunan', 'password')
+    .then(res => {
         expect(res.status).to.equal(200);
         expect(res).to.be.json;
         expect(res.body).to.be.an('object');
-      });
-  });
-
-  it('should return token', () => {
-    return chai.request(app).post('/login')
-    .send({ username: 'root', password: 'root' })
-      .then(res => {
         expect(res.body).to.have.property('token');
-        
-      });
+    });
+
   });
 
-});
+  it('Should retourn 401 and an error status', () => {
+    
+    DbConnection.models['admin'] ={
+      findAll: () => {
+        return {
+          then: (call) => {
+              call([]);
+          }
+        }
+      }
+    };
 
-describe('Authentification FAILED', () => {
-    
-      it('responds with Unauthorized', () => {
-        return chai.request(app).post('/login')
-        .send({ username: 'azerty', password: 'azerty' })
-        .catch((err) => {
-            expect(err.response.status).to.equal(401);
-            expect(err.response.body).to.be.an('object');
-            expect(err.response.body).to.have.property('error');
-          });
-      });
-    
+    return chai.request(app).post('/token')
+    .auth('wrong', 'password')
+    .then(res => {
+      console.log(res);
+      expect(res.status).to.be.equal(401);
+    });
+  });
+
 });

@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
@@ -8,13 +7,10 @@ import {config} from './env/config';
 import DbConnection from './DbConnection';
 import AuthRouter from './routes/AuthRouter';
 
-// Creates and configures an ExpressJS web server.
-class app {
+class App {
 
-  // ref to Express instance
   public express: express.Application;
 
-  //Run configuration methods on the Express instance.
   constructor() {
     this.express = express();
     this.middleware();
@@ -28,22 +24,22 @@ class app {
     this.express.use(logger('dev'));
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
-    this.express.use(jwt({ secret: config.jwt}).unless({path: ['/login','/ping']}));
+    this.express.use(jwt({ secret: config.jwt}).unless({path: ['/token','/ping']}));
   }
 
   // Configure API endpoints.
   private routes(): void {
     let router = express.Router();
-    router.get('/ping', (req, res, next) => {
+    router.get('/ping', (req, res) => {
       res.send('pong').status(200);
     });
-    router.get('/hello', (req, res, next) => {
+    router.get('/hello', (req, res) => {
       res.json({message: 'world'});
     });
     this.express.use('/', router);
-    this.express.use('/login', AuthRouter);
+    this.express.use('/token', AuthRouter);
   }
 
 }
 
-export default new app().express;
+export default new App().express;
