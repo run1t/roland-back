@@ -63,3 +63,5 @@ dist/
 
 #configuration
 src/env/config.ts
+
+.idea/*
