@@ -22,9 +22,9 @@ export class PlayerRouter {
     return this.router;
   }
 
-  public createPlayer (req: Request, res: Response, data) {
+  public createPlayer (req: Request, res: Response) {
     DbConnection.models['player']
-        .create(data)
+        .create(req.body)
         .then((player) => {
             return res.status(201).json({data: player});
         });
@@ -33,16 +33,21 @@ export class PlayerRouter {
   public getAllPlayers (req: Request, res: Response) {
     DbConnection.models['player']
         .findAll()
-        .then(function (players) {
+        .then( (players) => {
             return res.status(200).json({data: players})
         });
   }
 
-    public getOnePlayer (req: Request, res: Response, id) {
+    public getOnePlayer (req: Request, res: Response) {
         DbConnection.models['player']
-            .findOne({ where: {id_player: id} })
-            .then(function (player) {
-                return res.status(200).json({data: player})
+            .findOne({ where: {id_player: req.params["id"]} })
+            .then( (player) => {
+                if (!player || player.length === 0) {
+                    return res.status(404).json({error: 'notFound'})
+                } else {
+                    return res.status(200).json({data: player})
+                }
+
             });
     }
 }
