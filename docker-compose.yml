@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+    db:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: roland
+            POSTGRES_USER: roland
+            POSTGRES_DB: roland
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+          - 8080:8080
+    api:
+      build: .
+      links:
+        - db
+      environment:
+        PSQL_USER: roland
+        PSQL_PASS: roland
+        PSQL_HOST: db
+        PSQL_PORT: 5432
+        PSQL_NAME: roland
+        JWT: sgzregjkazpoeifgfekzfbfefzjopk
+        NODE_ENV: prod
+        NODE_ENV: prod
+      ports:
+        - 8081:3000
