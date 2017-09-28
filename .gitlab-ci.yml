@@ -16,6 +16,7 @@ build:
   image: kkarczmarczyk/node-yarn:latest
   stage: build
   script:
+    - yarn install
     - npm run build
   artifacts:
     paths:
