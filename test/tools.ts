@@ -16,6 +16,13 @@ export function mockModelWith(data) {
                     call(data);
                 }
             }
+        },
+        findOne : () => {
+            return{
+                then : (call) =>{
+                    call(data);
+                }
+            }
         }
     };
 }

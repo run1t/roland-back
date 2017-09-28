@@ -10,6 +10,8 @@ export class PlayerRouter {
   constructor() {
     this.router = Router();
     this.router.post('/', this.createPlayer);
+    this.router.get('/', this.getAllPlayers);
+    this.router.get('/:id', this.getOnePlayer);
   }
 
   /**
@@ -20,16 +22,28 @@ export class PlayerRouter {
     return this.router;
   }
 
-  public createPlayer (data) {
+  public createPlayer (req: Request, res: Response, data) {
     DbConnection.models['player']
         .create(data)
-        .then((res)=>{
-            console.log('ressssssssssss', res);
-        }).catch((err)=>{
-          console.log('eeeeeeer', err);
+        .then((player) => {
+            return res.status(201).json({data: player});
         });
   }
 
-  
+  public getAllPlayers (req: Request, res: Response) {
+    DbConnection.models['player']
+        .findAll()
+        .then(function (players) {
+            return res.status(200).json({data: players})
+        });
+  }
+
+    public getOnePlayer (req: Request, res: Response, id) {
+        DbConnection.models['player']
+            .findOne({ where: {id_player: id} })
+            .then(function (player) {
+                return res.status(200).json({data: player})
+            });
+    }
 }
 

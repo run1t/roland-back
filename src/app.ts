@@ -33,7 +33,7 @@ class App {
   // Configure API endpoints.
   private routes(): void {
     this.express.use('/token', new AuthRouter().init());
-    this.express.use('/player', new PlayerRouter().init());
+    this.express.use('/players', new PlayerRouter().init());
   }
 
 
