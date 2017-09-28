@@ -16,7 +16,7 @@ export default function defineAdmin(sequelize: Sequelize, DataTypes: DataTypes) 
     },
     login: DataTypes.STRING,
     password: DataTypes.STRING,
-  }
+  };
 
   return sequelize.define('admin', schema, defaultOption());
 }
