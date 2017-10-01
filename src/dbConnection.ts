@@ -48,11 +48,17 @@ export default class DbConnection {
     }
 
     private associateModels(){
-       /* Object.keys(DbConnection.models).forEach(function(modelName) {
-            if (DbConnection.models[modelName].associate) {
-                DbConnection.models[modelName].associate(DbConnection.models)
-            }
-        }) */
+        DbConnection.models['player'].belongsToMany(DbConnection.models['team'], {
+            through: 'belong',
+            foreignKey: 'id_team'
+        });
+
+        DbConnection.models['team'].belongsToMany(DbConnection.models['player'], {
+            through: 'belong',
+            foreignKey: 'id_player'
+        });
+
+        console.log(DbConnection.models['player']);
     }
 
 

@@ -6,6 +6,7 @@ import DbConnection from '../src/dbConnection';
 import * as jwt from 'jsonwebtoken';
 import {config} from "../src/env/config";
 import {mockModelWith} from "./tools";
+import {NO_PLAYER, ONE_PLAYER, THREE_PLAYERS, TOKEN} from "./mocks/player";
 
 chai.use(chaiHttp);
 const expect = chai.expect;
@@ -13,81 +14,48 @@ const expect = chai.expect;
 
 describe('Player', () => {
 
-    //DATAS
-    const players = [
-        {
-            id_player: '1234',
-            firstname: 'Cyprien',
-            lastname: 'Rose',
-            sexe: 'TRUE',
-            nationality: 'French'
-        },        {
-            id_player: '56789',
-            firstname: 'Roro',
-            lastname: 'LandLand',
-            sexe: 'TRUE',
-            nationality: 'French'
-        },
-    ];
-    const player = {
-        id_player: '1234',
-        firstname: 'Cyprien',
-        lastname: 'Rose',
-        sexe: 'TRUE',
-        nationality: 'French'
-    };
-    const noPlayer = [];
+
 
 
     it('should be able to create new player', () => {
-        DbConnection.models['player'] = mockModelWith(player);
-        let toktok = 'Bearer '+ jwt.sign({} as object, config.jwt);
+
+        DbConnection.models['player'] = mockModelWith(ONE_PLAYER);
+
         return chai.request(app).post('/players')
-            .set('Authorization', toktok)
+            .set('Authorization', TOKEN)
             .then(res => {
                 expect(res.status).to.equal(201);
-                expect(res).to.be.json;
                 expect(res.body).to.be.an('object');
-                expect(res.body).to.have.property('data');
             });
     });
 
     it('should be able to get all players', () => {
-        DbConnection.models['player'] = mockModelWith(players);
-        let toktok = 'Bearer '+ jwt.sign({} as object, config.jwt);
+        DbConnection.models['player'] = mockModelWith(THREE_PLAYERS);
         return chai.request(app).get('/players')
-            .set('Authorization', toktok)
+            .set('Authorization', TOKEN)
             .then(res => {
                 expect(res.status).to.equal(200);
-                expect(res).to.be.json;
-                expect(res.body).to.be.an('object');
-                expect(res.body).to.have.property('data');
+                expect(res.body).to.be.an('array');
             });
 
     });
 
     it('should be able to get a player', () => {
-        DbConnection.models['player'] = mockModelWith(player);
-
-        let toktok = 'Bearer '+ jwt.sign({} as object, config.jwt);
+        DbConnection.models['player'] = Object.assign({}, mockModelWith(ONE_PLAYER));
         return chai.request(app).get('/players/1222224')
-            .set('Authorization', toktok)
+            .set('Authorization', TOKEN)
             .then(res => {
                 expect(res.status).to.equal(200);
-                expect(res).to.be.json;
                 expect(res.body).to.be.an('object');
-                expect(res.body).to.have.property('data');
             });
 
 
     });
 
     it('should NOT be able to get a player', () => {
-        DbConnection.models['player'] = mockModelWith(noPlayer);
-
-        let toktok = 'Bearer '+ jwt.sign({} as object, config.jwt);
+        DbConnection.models['player'] = Object.assign({}, mockModelWith(NO_PLAYER));
         return chai.request(app).get('/players/12')
-            .set('Authorization', toktok)
+            .set('Authorization', TOKEN)
             .then(() => {})
             .catch((err) => {
                 expect(err.status).to.equal(404);
@@ -95,11 +63,5 @@ describe('Player', () => {
 
 
     });
-    it('should be able to update player', () => {
 
-    });
-
-    it('should be able to delete player', () => {
-
-    });
 });

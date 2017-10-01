@@ -2,7 +2,7 @@ import {DataTypes, Sequelize} from 'sequelize'
 import {defaultOption} from '../utils/sequelize'
 
 export interface Team {
-  id_team?: string
+  id_team?: number;
 }
 
 export default function defineTeam(sequelize: Sequelize, DataTypes: DataTypes) {

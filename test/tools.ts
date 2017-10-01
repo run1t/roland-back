@@ -28,3 +28,6 @@ export function mockModelWith(data) {
 }
 
 
+export function assign(){
+
+}

@@ -1,5 +1,5 @@
 import {DataTypes, Sequelize} from 'sequelize'
-import {defaultOption} from '../utils/sequelize'
+import {defaultOption, overrideDefaultOptions} from '../utils/sequelize'
 
 export interface Player {
   id_player?: number,
@@ -10,18 +10,28 @@ export interface Player {
 }
 
 export default function definePlayer(sequelize: Sequelize, DataTypes: DataTypes) {
-  
+
   const schema = {
     id_player: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    firstname: DataTypes.STRING,
-    lastname: DataTypes.STRING,
-    sexe: DataTypes.BOOLEAN,
-    nationality: DataTypes.STRING
+    firstname: {
+        type: DataTypes.STRING
+    },
+
+    lastname: {
+        type: DataTypes.STRING
+    },
+    sexe: {
+        type: DataTypes.BOOLEAN
+    },
+    nationality:{
+        type: DataTypes.STRING
+    }
   };
 
-  return sequelize.define('player', schema, defaultOption());
+   return sequelize.define('player', schema, defaultOption());
+
 }
